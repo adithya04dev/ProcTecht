@@ -1,0 +1,21 @@
+names:
+- bike
+- bike_bike_accident
+- bike_object_accident
+- bike_person_accident
+- car
+- car_bike_accident
+- car_car_accident
+- car_object_accident
+- car_person_accident
+- person
+nc: 10
+roboflow:
+  license: CC BY 4.0
+  project: accidetect-a9uvo
+  url: https://universe.roboflow.com/abc-llt0y/accidetect-a9uvo/dataset/3
+  version: 3
+  workspace: abc-llt0y
+test: ../test/images
+train: ../AcciDetect-3/train/images
+val: ../AcciDetect-3/valid/images

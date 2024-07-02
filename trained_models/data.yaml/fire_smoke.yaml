@@ -1,0 +1,13 @@
+names:
+- fire
+- smoke
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: firesmoke-qedaj
+  url: https://universe.roboflow.com/gradproject-b3qu8/firesmoke-qedaj/dataset/5
+  version: 5
+  workspace: gradproject-b3qu8
+test: ../firesmoke-3/test/images
+train: ../firesmoke-3/train/images
+val: ../firesmoke-3/valid/images

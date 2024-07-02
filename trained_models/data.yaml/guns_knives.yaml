@@ -1,0 +1,13 @@
+names:
+- gun
+- knife
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: guns_n_knives-h4bky
+  url: https://universe.roboflow.com/crime-detection/guns_n_knives-h4bky/dataset/3
+  version: 3
+  workspace: crime-detection
+test: ../test/images
+train: ../guns_n_knives-3/train/images
+val: ../guns_n_knives-3/valid/images

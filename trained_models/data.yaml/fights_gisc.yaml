@@ -1,0 +1,12 @@
+names:
+- fight
+nc: 1
+roboflow:
+  license: CC BY 4.0
+  project: gisc
+  url: https://universe.roboflow.com/mslee/gisc/dataset/1
+  version: 1
+  workspace: mslee
+test: ../gisc-1/test/images
+train: ../gisc-1/train/images
+val: ../gisc-1/valid/images

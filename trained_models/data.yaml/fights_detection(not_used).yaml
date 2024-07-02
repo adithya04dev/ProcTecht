@@ -1,0 +1,12 @@
+names:
+- fight
+nc: 1
+roboflow:
+  license: MIT
+  project: sight-fight-detection
+  url: https://universe.roboflow.com/sight/sight-fight-detection/dataset/1
+  version: 1
+  workspace: sight
+test: ../SIGHT-Fight-Detection-1/test/images
+train: ../SIGHT-Fight-Detection-1/train/images
+val: ../SIGHT-Fight-Detection-1/valid/images

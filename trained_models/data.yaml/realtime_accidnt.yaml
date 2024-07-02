@@ -1,0 +1,21 @@
+names:
+- bike
+- bike_bike_accident
+- bike_object_accident
+- bike_person_accident
+- car
+- car_bike_accident
+- car_car_accident
+- car_object_accident
+- car_person_accident
+- person
+nc: 10
+roboflow:
+  license: CC BY 4.0
+  project: real-time-accident-detection
+  url: https://universe.roboflow.com/puyush-fipgg/real-time-accident-detection/dataset/1
+  version: 1
+  workspace: puyush-fipgg
+test: ../Real-Time-Accident-Detection-1/test/images
+train: ../Real-Time-Accident-Detection-1/train/images
+val: ../Real-Time-Accident-Detection-1/valid/images
