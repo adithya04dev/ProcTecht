@@ -9,9 +9,9 @@ We trained YOLOv8 object detection model on 5 different curom tasks like acciden
 A web interface platform is built using React and FastAPI for security personals to monitor the detected incidents from trained model.
 
 ## Tech Stack 
-React & FAST API (Web Interface)
-MongoDB, AWS S3 (For Storage)
-ultralytics python package(For training Yolo models)
+React & FAST API (Web Interface)  
+MongoDB, AWS S3 (For Storage)   
+ultralytics python package(For training Yolo models)   
 
 ## Start frontend
 ```bash
