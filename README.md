@@ -10,8 +10,10 @@ A web interface platform is built using React and FastAPI for security personals
 
 ## Tech Stack 
 React & FAST API (Web Interface)  
-MongoDB, AWS S3 (For Storage)   
-ultralytics python package(For training Yolo models)   
+
+MongoDB , AWS S3 (For Storage)   
+
+Ultralytics python package (For training Yolo models)   
 
 ## Start frontend
 ```bash
