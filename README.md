@@ -1,6 +1,6 @@
-## Rakshak (रक्षक)
+## ProTecht 
 
-Rakshak is an AI Powered Security Solution which detects & identifies various types of incidents(fire,accidents etc) from CCTV streams.
+ProTecht is an AI Powered Security Solution which detects & identifies various types of incidents(fire,accidents etc) from CCTV streams.
 
 We trained YOLOv8 object detection model on 5 different curom tasks like accident,fire,weapons,smoke,climber detection using roboflow datasets.
 
