@@ -1,6 +1,6 @@
-## WatchNet 
+## ProTecht 
 
-WatchNet is an AI Powered Security Solution which detects & identifies various types of incidents(fire,accidents etc) from CCTV streams.
+ProTecht is an constant surveillance security solution which detects & identifies various types of incidents(fire,accidents etc) from CCTV streams using YOLOv8 models.
 
 We trained YOLOv8 object detection model on 5 different curom tasks like accident,fire,weapons,smoke,climber detection using roboflow datasets.
 
