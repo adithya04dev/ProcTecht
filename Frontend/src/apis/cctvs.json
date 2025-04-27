@@ -1,6 +1,18 @@
 {
   "features": [
- 
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cctv_p04",
+        "cctv_type": "station_premises",
+        "title": "Jawahar Nagar",
+        "description": "Ibrahim Bagh",
+        "kind": "default",
+        "streamUrl": "https://res.cloudinary.com/dp0ayty6p/video/upload/v1705472325/samples/prison_wall_climbing.mp4"
+
+      },
+      "geometry": { "coordinates": [75.849222, 26.917390], "type": "Point" }
+    },
     {
       "type": "Feature",
       "properties": {
@@ -9,7 +21,7 @@
         "title": "Cell #1",
         "description": "Prison, Narsinghi",
         "kind": "default",
-        "streamUrl": "https://res.cloudinary.com/dp0ayty6p/video/upload/v1707012937/samples/gunTamperCrack.mp4"
+        "streamUrl": "https://res.cloudinary.com/dx8mm2xd0/video/upload/v1744805716/guncrack_jcfunt.mp4"
       },
       "geometry": { "coordinates": [75.801752,26.923884], "type": "Point" }
     },
@@ -21,7 +33,7 @@
         "title": "Backyard",
         "description": "Prison, Narsinghi",
         "kind": "default",
-        "streamUrl":         "https://res.cloudinary.com/dp0ayty6p/video/upload/v1705485743/samples/fire_sample.mp4"
+        "streamUrl":"https://res.cloudinary.com/dp0ayty6p/video/upload/v1705485743/samples/fire_sample.mp4"
 
       },
       "geometry": { "coordinates": [75.801752,26.923884], "type": "Point" }
@@ -38,19 +50,7 @@
       },
       "geometry": { "coordinates": [75.793044, 26.920830], "type": "Point" }
     },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "cctv_p04",
-        "cctv_type": "public",
-        "title": "Jawahar Nagar",
-        "description": "Ibrahim Bagh",
-        "kind": "default",
-        "streamUrl": "https://res.cloudinary.com/dp0ayty6p/video/upload/v1705472325/samples/prison_wall_climbing.mp4"
 
-      },
-      "geometry": { "coordinates": [75.849222, 26.917390], "type": "Point" }
-    },
     {
       "type": "Feature",
       "properties": {

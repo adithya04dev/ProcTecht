@@ -14,7 +14,7 @@ export function getWeaponColor(weaponLabel: string) {
   return WeaponColorMap[weaponLabel] || WeaponColorMap.Other;
 }
 
-export const ACCIDENT_COLOR = "red";
+export const ACCIDENT_COLOR = "#370088";
 export const FIRE_COLOR = "#370088";
 export const CLIMBER_COLOR = "#00ffff";
 export const PHONE_IN_JAIL = "#ff0000";

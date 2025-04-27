@@ -1,5 +1,5 @@
-fastapi==0.108.0
-uvicorn[standard]
+fastapi
+uvicorn
 ultralytics
 numpy
 keras
@@ -8,7 +8,7 @@ requests
 boto3
 dnspython
 python-decouple
-face-recognition
+# face-recognition
 python-multipart
 roboflow
 inference-sdk

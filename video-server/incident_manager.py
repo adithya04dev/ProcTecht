@@ -71,7 +71,7 @@ if not os.path.exists("logs"):
 
 class IncidentManager:
     def __init__(self, identifier: str):
-        self.data_file = f"logs/incident_data_{identifier}.json"
+        self.data_file = f"./logs/incident_data_{identifier}.json"
         self.incident_map = self.load_data()
 
     def load_data(self):
@@ -162,8 +162,8 @@ class IncidentManager:
 
     def notify(self, frame, cctvId, cctv_type, detection_type, detections):
         # Dummy notify function (replace with actual implementation)
-        print(
-            f"Notifying for {detection_type} detection on CCTV {cctvId}:", detections)
+        # print(
+        #     f"Notifying for {detection_type} detection on CCTV {cctvId}:", detections)
         current_datetime = datetime.now(timezone.utc)
 
         incident = {
@@ -196,7 +196,7 @@ class IncidentManager:
 
         bucket.upload_fileobj(byte_im_io, uname)
         incident['image'] = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{uname}"
-        print("Reached AWS")
+        # print("Reached AWS")
         if REGISTER_INCIDENT:
             #  Save incident notification in DB
             # print("Save to DB -", incident)

@@ -37,6 +37,7 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
         from models.fight import detect_fight, detect_fight_dummy
     if climbing or suspicious:
         from models.anomaly_lstm import detect_anomaly, detect_anomaly_dummy
+        from models.climber import detect_climber
     if fire:
         from models.fire import detect_fire, detect_fire_dummy
     if crack:
@@ -46,7 +47,7 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
     print(weapons, accidents, face, violence, climbing, fire, crack, tamper)
 
     from incident_manager import IncidentManager, IncidentType
-    from config import MIN_ACCIDENT_REPORT_CONF, MIN_VIOLENCE_REPORT_CONF, MIN_WEAPON_REPORT_CONF, MIN_FIRE_REPORT_CONF, MIN_CRACK_REPORT_CONF
+    from config import MIN_ACCIDENT_REPORT_CONF, MIN_VIOLENCE_REPORT_CONF, MIN_WEAPON_REPORT_CONF, MIN_FIRE_REPORT_CONF, MIN_CRACK_REPORT_CONF,MIN_CLIMBER_CONF
 
     cap = cv2.VideoCapture(url)
     incident_manager = IncidentManager(cctv_id)
@@ -64,6 +65,8 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
         'crack': None,
         'tamper': None,
         'face': None,
+        'climber':None
+
     }
 
     try:
@@ -91,30 +94,33 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                     accidents_future = None
                     tamper_future = None
                     face_future = None
+                    climber_future=None
 
                     # LSTM models
                     # Some Model need continuous frames (@TODO - control it using time.time())
-                    if framecount % LSTM_FRAME_REGISTER_EVERY_N_FRAME == 0:
-                        if violence:
-                            fight_future = executor.submit(detect_fight, frame)
-                            # fight_future = executor.submit(detect_fight_dummy, frame)
+                    # if framecount % LSTM_FRAME_REGISTER_EVERY_N_FRAME == 0:
+                    #     if violence:
+                    #         fight_future = executor.submit(detect_fight, frame)
+                    #         # fight_future = executor.submit(detect_fight_dummy, frame)
 
-                        if climbing or suspicious:
-                            # print("Detecting Anomaly")
-                            anomaly_future = executor.submit(
-                                detect_anomaly, frame)
+                    #     if climbing or suspicious:
+                    #         # print("Detecting Anomaly")
+                    #         anomaly_future = executor.submit(
+                    #             detect_anomaly, frame)
+                    #         anomaly_future = executor.submit(
+                    #             detect_climber, frame)   
                             # anomaly_future = executor.submit(detect_anomaly_dummy, frame)
 
                     # Frame-independent models
                     # Single frame detection are updated every {DETECT_EVERY_N_FRAME} frames
-                    if framecount % DETECT_EVERY_N_FRAME == 0:
-                        if face:
-                            face_future = executor.submit(detect_face, frame)
+                    # if framecount % DETECT_EVERY_N_FRAME == 0:
+                    #     if face:
+                    #         face_future = executor.submit(detect_face, frame)
                             # face_future = executor.submit(detect_face_dummy, frame)
 
                     if framecount % DETECT_EVERY_N_FRAME == 0:
                         # Use threads to parallelize detection tasks
-                        objects_future = executor.submit(detect_objects, frame)
+                        # objects_future = executor.submit(detect_objects, frame)
                         # objects_future = executor.submit(detect_objects_dummy, frame)
 
                         if tamper:
@@ -133,6 +139,9 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                             fire_future = executor.submit(
                                 detect_fire, frame)
                             # fire_future = executor.submit(detect_fire_dummy, frame)
+                        if climbing:
+                            climber_future = executor.submit(detect_climber, frame)
+                            # climber_future = executor.submit(detect_climber_dummy, frame)
                         
                         if crack:
                             crack_future = executor.submit(
@@ -142,25 +151,25 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                         # climber_future = executor.submit(detect_climber, frame)
                         # # climber_future = executor.submit(detect_climber_dummy, frame)
 
-                    if face_future is not None:
-                        detections['face'] = face_future.result()
+                    # if face_future is not None:
+                    #     detections['face'] = face_future.result()
 
-                        # Report incident for fire if applicable
-                        if detections['face'] is not None and len(detections['face']) > 0:
-                            incident_manager.registerDetections(
-                                frame, cctv_id, cctv_type, IncidentType.face, detections['face'])
+                    #     # Report incident for fire if applicable
+                    #     if detections['face'] is not None and len(detections['face']) > 0:
+                    #         incident_manager.registerDetections(
+                    #             frame, cctv_id, cctv_type, IncidentType.face, detections['face'])
 
                     # Wait for all frame-independent threads to complete
-                    if tamper_future is not None:
-                        detections['tamper'] = tamper_future.result()
-                        # print(detections['tamper'])
-                        # Report incident for fire if applicable
-                        if detections['tamper'] is not None and 'tamper' in detections['tamper'] and detections['tamper']['tamper']:
-                            incident_manager.registerDetections(
-                                frame, cctv_id, cctv_type, IncidentType.fire, detections['tamper'])
+                    # if tamper_future is not None:
+                    #     detections['tamper'] = tamper_future.result()
+                    #     # print(detections['tamper'])
+                    #     # Report incident for fire if applicable
+                    #     if detections['tamper'] is not None and 'tamper' in detections['tamper'] and detections['tamper']['tamper']:
+                    #         incident_manager.registerDetections(
+                    #             frame, cctv_id, cctv_type, IncidentType.fire, detections['tamper'])
 
-                    if objects_future is not None:
-                        detections['objects'] = objects_future.result()
+                    # if objects_future is not None:
+                    #     detections['objects'] = objects_future.result()
 
                     if fire_future is not None:
                         detections['fire'] = fire_future.result()
@@ -169,6 +178,7 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                         if detections['fire'] is not None and len(detections['fire']) > 0:
                             for prediction in detections['fire']:
                                 if prediction['label'] == "fire" and prediction['confidence'] >= MIN_FIRE_REPORT_CONF:
+                                    print(prediction)
                                     incident_manager.registerDetections(
                                         frame, cctv_id, cctv_type, IncidentType.fire, detections['fire'])
                                     break
@@ -183,7 +193,7 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                                     incident_manager.registerDetections(
                                         frame, cctv_id, cctv_type, IncidentType.crack, detections['crack'])
                                     break
-
+# hi ra
                     if accidents_future is not None:
                         detections['accidents'] = accidents_future.result()
 
@@ -193,6 +203,16 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                                 if (prediction['label'] == "car_bike_accident" or prediction['label'] == "car_car_accident" or prediction['label'] == "car_object_accident" or prediction['label'] == "car_person_accident"  ) and prediction['confidence'] >= MIN_ACCIDENT_REPORT_CONF:
                                     incident_manager.registerDetections(
                                         frame, cctv_id, cctv_type, IncidentType.accident, detections['accidents'])
+                                    break
+                    if climber_future is not None:
+                        detections['climber'] = climber_future.result()
+                        
+                        # Report incident for climber if applicable
+                        if detections['climber'] is not None and len(detections['climber']) > 0:
+                            for prediction in detections['climber']:
+                                if prediction['confidence'] >= MIN_CLIMBER_CONF:
+                                    incident_manager.registerDetections(
+                                        frame, cctv_id, cctv_type, IncidentType.climber, detections['climber'])
                                     break
 
                     if weapons_future is not None:
@@ -207,24 +227,24 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                                     break
 
                     # Wait for all LSTM threads to complete
-                    if anomaly_future is not None:
-                        detections['anomalies'] = anomaly_future.result()
-                        # print(anomaly_future.result())
-                        # Report incident for anomalies if applicable
-                        if detections['anomalies'] is not None and detections['anomalies']['climbing']:
-                            incident_manager.registerDetections(
-                                frame, cctv_id, cctv_type, IncidentType.climber, [])  # Nothing to draw here
-                        if detections['anomalies'] is not None and detections['anomalies']['suspicious']:
-                            incident_manager.registerDetections(
-                                frame, cctv_id, cctv_type, IncidentType.suspicious, [])  # Nothing to draw here
+                    # if anomaly_future is not None:
+                    #     detections['anomalies'] = anomaly_future.result()
+                    #     # print(anomaly_future.result())
+                    #     # Report incident for anomalies if applicable
+                    #     if detections['anomalies'] is not None and detections['anomalies']['climbing']:
+                    #         incident_manager.registerDetections(
+                    #             frame, cctv_id, cctv_type, IncidentType.climber, [])  # Nothing to draw here
+                    #     if detections['anomalies'] is not None and detections['anomalies']['suspicious']:
+                    #         incident_manager.registerDetections(
+                    #             frame, cctv_id, cctv_type, IncidentType.suspicious, [])  # Nothing to draw here
 
-                    if fight_future is not None:
-                        detections['fight'] = fight_future.result()
+                    # if fight_future is not None:
+                    #     detections['fight'] = fight_future.result()
 
-                        # Report incident for fight if applicable
-                        if detections['fight'] is not None and detections['fight']['prediction_confidence'] > MIN_VIOLENCE_REPORT_CONF and detections['fight']['prediction_label'] == 'fight':
-                            incident_manager.registerDetections(
-                                frame, cctv_id, cctv_type, IncidentType.violence, [])  # Nothing to draw here
+                    #     # Report incident for fight if applicable
+                    #     if detections['fight'] is not None and detections['fight']['prediction_confidence'] > MIN_VIOLENCE_REPORT_CONF and detections['fight']['prediction_label'] == 'fight':
+                    #         incident_manager.registerDetections(
+                    #             frame, cctv_id, cctv_type, IncidentType.violence, [])  # Nothing to draw here
 
                     prev_detections = detections
 
@@ -233,7 +253,10 @@ def process_video_stream(url, cctv_id: str, cctv_type: str, output_queue: Queue,
                     image_data_base64 = base64.b64encode(
                         buffer.tobytes()).decode('utf-8')
 
-                    # print("Send detections", detections)
+
+                    # if len(detections['fire'])>0:
+                    #     print(detections)
+                    # print(detections)
                     output_queue.put(
                         {"frame": image_data_base64, "detections": detections})
 
@@ -348,6 +371,6 @@ async def websocket_endpoint(websocket: WebSocket, stream_url: str, cctv_id: str
         #     print("Error closing websocket", e)
 
 
-# Run the FastAPI server
+# Run the FastAPI serve
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5005)
+    uvicorn.run("video_server:app", host="0.0.0.0", port=5005, reload=True)

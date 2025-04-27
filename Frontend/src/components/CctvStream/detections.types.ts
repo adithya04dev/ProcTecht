@@ -10,8 +10,13 @@ export interface ReceivedMessageData {
     crack: CrackDetection[];
     tamper: Tamper | null;
     face: FaceDetection[];
+    climber: ClimberDetection[];
   };
 }
+export interface ClimberDetection extends ObjectDetection {
+  label: "climber";
+}
+
 
 export interface ObjectDetection {
   label: string;
@@ -24,7 +29,7 @@ export interface Tamper {
   tamper: boolean;
 }
 export interface WeaponDetection extends ObjectDetection {
-  label: "gun" | "knife" | "Pistol";
+  label:  "knife" | "Pistol"| "gun";
 }
 export interface FireDetection extends ObjectDetection {
   label: "fire";
@@ -33,7 +38,7 @@ export interface CrackDetection extends ObjectDetection {
   label: "severe_crack" | "normal_crack";
 }
 export interface AccidentDetection extends ObjectDetection {
-  label: "Accident";
+  label: "Accident" | "car_car_accident";
 }
 export interface FaceDetection extends ObjectDetection {}
 export interface Classification {

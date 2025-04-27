@@ -27,13 +27,13 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />,
     component: <Dashboard />
   },
-  {
-    name: "Reported Incidents",
-    layout: "/station-admin",
-    path: "reported-incidents",
-    icon: <TbReport className="h-6 w-6" />,
-    component: <Reports />,
-  },
+  // {
+  //   name: "Reported Incidents",
+  //   layout: "/station-admin",
+  //   path: "reported-incidents",
+  //   icon: <TbReport className="h-6 w-6" />,
+  //   component: <Reports />,
+  // },
   {
     name: "Detected Incidents",
     layout: "/station-admin",
@@ -55,20 +55,20 @@ const routes = [
     icon: <BiCctv className="h-6 w-6" />,
     component: <PublicCCTvs />,
   },
-  {
-    name: "Live Footage",
-    layout: "/station-admin",
-    path: "live-footage",
-    icon: <BiCctv className="h-6 w-6" />,
-    component: <LiveFootage />,
-  },
-  {
-    name: "ChatBot",
-    layout: "/station-admin",
-    path: "chatbot",
-    icon: <SiWechat className="h-6 w-6" />,
-    component: <Chatbot />,
-  },
+  // {
+  //   name: "Live Footage",
+  //   layout: "/station-admin",
+  //   path: "live-footage",
+  //   icon: <BiCctv className="h-6 w-6" />,
+  //   component: <LiveFootage />,
+  // },
+  // {
+  //   name: "ChatBot",
+  //   layout: "/station-admin",
+  //   path: "chatbot",
+  //   icon: <SiWechat className="h-6 w-6" />,
+  //   component: <Chatbot />,
+  // },
   {
     name: "Staff",
     layout: "/station-admin",

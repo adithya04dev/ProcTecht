@@ -9,7 +9,7 @@ import CCTVStream from "@/components/CctvStream/CCTVStream";
 
 enum Tab {
   Prison_Footage = "Prison",
-  Premises_Footage = "Station Premises",
+  Premises_Footage = "Station Backyard",
 }
 const TabToCctvTypeMapping: Record<Tab, CCTV_TYPES> = {
   [Tab.Prison_Footage]: CCTV_TYPES.PRISON,
@@ -17,7 +17,7 @@ const TabToCctvTypeMapping: Record<Tab, CCTV_TYPES> = {
 };
 
 const Footages = () => {
-  console.log("hello");
+  // console.log("hello");
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Prison_Footage);
   const [shownCctvs, setShownCctvs] = useState<CctvDetails[]>([]);
 

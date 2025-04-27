@@ -7,4 +7,4 @@ export const MAX_VOID_FRAMES = 100;
 
 export const NO_OF_PUBLIC_DEFAULT_CCTVS = 1
 export const NO_OF_PREMISE_DEFAULT_CCTVS = 1
-export const NO_OF_PRISON_DEFAULT_CCTVS = 2
+export const NO_OF_PRISON_DEFAULT_CCTVS = 1

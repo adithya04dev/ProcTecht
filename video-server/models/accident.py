@@ -49,7 +49,7 @@ def parse_yolo_predictions(predictions, min_conf=0.5):
                 'bbox_std': predictions[0].boxes[i].xywh[0].tolist(),
                 'orig_shape': predictions[0].orig_shape
             })
-    print(results)
+            print(results)
     return results
 
 print("Accidents YOLO Loaded")

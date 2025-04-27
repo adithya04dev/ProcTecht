@@ -1,16 +1,16 @@
-fastapi==0.79.0
+fastapi
 uvicorn[standard]
-# uvicorn==0.18.3
-python-decouple==3.8
-pymongo==4.1.1
+# uvicorn
+python-decouple
+pymongo
 pymongo[srv]
-bcrypt==4.0.1
-passlib==1.7.4
-requests==2.28.2
+bcrypt
+passlib
+requests
 boto3
-pydantic==1.10.11
-dnspython==2.2.1
-python-multipart==0.0.5
+pydantic
+dnspython
+python-multipart
 ultralytics
 numpy
 opencv-python

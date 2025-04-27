@@ -20,7 +20,7 @@ admin2 = Admin(
     admin_name="kishore"
 )
 
-create_admin(admin1)
+# create_admin(admin1)
 # create_admin(admin2)
 
 # #### Creating 10 incidents for each station
@@ -70,22 +70,22 @@ create_admin(admin1)
 #     create_incident(incident2)
 
 # ### Creating 5 staff for each station
-# from src.models.staff_model import Staff
-# from src.database.auth_db import create_staff
+from src.models.staff_model import Staff
+from src.database.auth_db import create_staff
 
-# for i in range(5):
-#     staff1 = Staff(
-#         password=PASSWORD,
-#         station_name="Andheri",
-#         staff_name="StaffA"+str(i),
-#         phone="987654321"+str(i)
-#     )
-#     staff2 = Staff(
-#         password=PASSWORD,
-#         station_name="CSMT",
-#         staff_name="StaffB"+str(i),
-#         phone="987654322"+str(i)
-#     )
-#     create_staff(staff1)
-#     create_staff(staff2)
+for i in range(3):
+    staff1 = Staff(
+        password=PASSWORD,
+        station_name="Narsinghi",
+        staff_name="StaffA"+str(i),
+        phone="987654321"+str(i)
+    )
+    staff2 = Staff(
+        password=PASSWORD,
+        station_name="CSMT",
+        staff_name="StaffB"+str(i),
+        phone="987654322"+str(i)
+    )
+    create_staff(staff1)
+    create_staff(staff2)
 

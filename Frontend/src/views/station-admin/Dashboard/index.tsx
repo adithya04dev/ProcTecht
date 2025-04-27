@@ -29,13 +29,13 @@ const Dashboard = () => {
       {/* Card widget */}
 
       <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3">
-        <Widget
+        {/* <Widget
           icon={<TbReport className="h-7 w-7" />}
           title={"Reported Incidents"}
           subtitle={reportedIncidents
             .filter((obj) => obj.status === "Pending")
             .length.toString()}
-        />
+        /> */}
         <Widget
           icon={<MdReport className="h-7 w-7" />}
           title={"Detected Incidents"}
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
       <div className="col-span-2 mt-5 grid grid-cols-2 gap-5 md:grid-cols-5 ">
         {/* Reported Incidents */}
-        <div className="col-span-2 md:col-span-3">
+        {/* <div className="col-span-2 md:col-span-3">
           {reportedIncidents?.length > 0 ? (
             <IncidentTable
               title="Reported Incidents"
@@ -78,7 +78,7 @@ const Dashboard = () => {
           ) : (
             <TableSkeleton type="recentIncident" />
           )}
-        </div>
+        </div> */}
 
         {staff?.length > 0 ? (
           <div className="col-span-2 rounded-[20px]">

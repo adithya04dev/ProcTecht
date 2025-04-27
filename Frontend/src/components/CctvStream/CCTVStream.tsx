@@ -27,12 +27,14 @@ import {
   ObjectDetection,
   ReceivedMessageData,
   WeaponDetection,
+  ClimberDetection
 } from "./detections.types";
 import { VIDEO_STREAM_SERVER } from "@/constants/config";
 import DangerTag from "./DangerTag";
 import { useNavigate } from "react-router-dom";
 import { BsExclamationCircle } from "react-icons/bs";
 import { playBeepSound } from "./beep";
+import { current } from "@reduxjs/toolkit";
 
 
 interface CCTVStreamProps {
@@ -71,18 +73,19 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
   const [currentFaceDetections, setCurrentFaceDetections] = useState<
     FaceDetection[]
   >([]);
+  const [currentClimberDetections, setCurrentClimberDetections] = useState<
+    ClimberDetection[]
+  >([]);
   const [, setCurrentObjectDetections] = useState<ObjectDetection[]>([]);
   const [, setCurrentTamperStatus] = useState(false);
-  const [, setCurrentWeaponDetection] = useState<WeaponDetection[]>([]);
+  const [currentWeaponDetections, setCurrentWeaponDetection] = useState<WeaponDetection[]>([]);
   const [currentFireDetections, setCurrentFireDetection] = useState<
     FireDetection[]
   >([]);
   const [currentCrackDetections, setCurrentCrackDetection] = useState<
     CrackDetection[]
   >([]);
-  const [currentAccidentDetections, setCurrentAccidentDetection] = useState<
-    AccidentDetection[]
-  >([]);
+  const [currentAccidentDetections, setCurrentAccidentDetection] = useState([]);
   const [currentFightClassification, setCurrentFightClassification] =
     useState<FightClassification | null>(null);
   const [currentAnomalyClassification, setCurrentAnomalyClassification] =
@@ -131,10 +134,13 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
       setCurrentTamperStatus(
         Boolean(lastJsonMessage.detections?.tamper?.tamper)
       );
-      console.log(
-        "Tamper",
-        lastJsonMessage.detections?.tamper?.tamper || false
-      );
+      // console.log(
+      //   "Tamper",
+      //   lastJsonMessage.detections?.tamper?.tamper || false
+      // );
+      // if (lastJsonMessage.detections?.accidents?.length > 0) {
+      //   console.log(lastJsonMessage.detections);
+      // }
 
       setCurrentFrameData(newFrame);
       setFrameCount((prevFrameCount) => prevFrameCount + 1);
@@ -166,14 +172,18 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
         lastJsonMessage.detections?.accidents || [],
         0
       );
-      if (
-        receivedCrackDetections.length > 0 ||
-        receivedFireDetections.length > 0 ||
-        receivedAccidentDetections.length > 0 ||
-        receivedFireDetections.length > 0
-      ) {
-        toBeep = true;
-      }
+      const receivedClimberDetections = filterDetections(
+        lastJsonMessage.detections?.climber || [],
+        0
+      );
+      // if (
+      //   receivedCrackDetections.length > 0 ||
+      //   receivedFireDetections.length > 0 ||
+      //   receivedAccidentDetections.length > 0 ||
+      //   receivedFireDetections.length > 0
+      // ) {
+      //   toBeep = true;
+      // }
       // console.log(receivedAccidentDetections);
 
       const receivedFightClassification =
@@ -188,7 +198,23 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
       setCurrentAccidentDetection(receivedAccidentDetections);
       setCurrentFightClassification(receivedFightClassification);
       setCurrentAnomalyClassification(receivedAnomalyClassification);
+      setCurrentClimberDetections(receivedClimberDetections);
+      
+      if (receivedClimberDetections.length > 0) {
+        console.log("receivedClimberDetections", receivedClimberDetections);
+        toBeep = true;
+      }
 
+      if (currentAccidentDetections.length > 0) {
+        console.log("currentAccidentDetections",currentAccidentDetections);
+      }
+      
+      // if (currentWeaponDetections.length > 0) {
+      //   console.log(currentWeaponDetections);
+      // }
+      if (receivedAccidentDetections.length > 0) {
+        console.log("receivedAccidentDetections",receivedAccidentDetections);
+      }
       // console.log(`Received ${receivedFireDetections.length} fires`, {
       //   receivedObjectDetections,
       //   receivedFaceDetections,
@@ -207,7 +233,7 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
 
         receivedWeaponDetections.forEach((weaponDetection) => {
           const label = weaponDetection.label;
-          if (label.toLocaleLowerCase() === "pistol") return;
+          if (label.toLocaleLowerCase() === "pistol" ) return;
           const weaponColor = getWeaponColor(weaponDetection.label);
           const { x, y, width, height } = bboxCoordsToCanvasCoords(
             canvas,
@@ -218,10 +244,8 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
             lineWidth: 2,
             strokeStyle: weaponColor,
             label: {
-              // text: `${
-              //   label
-              // } ${weaponDetection.confidence.toFixed(2)}`,
-              text: label || "",
+
+              text: weaponDetection.label ,
               xOffset: 0,
               yOffset: -5,
               font: LabelFont,
@@ -281,7 +305,50 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
             },
           });
         });
+        receivedClimberDetections.forEach((climberDetection) => {
+          const { x, y, width, height } = bboxCoordsToCanvasCoords(
+            canvas,
+            climberDetection.bbox
+          );
 
+          drawRect(ctx, x, y, width, height, {
+            lineWidth: 2,
+            strokeStyle: CLIMBER_COLOR,
+            label: {
+              text: climberDetection.label || "",
+              xOffset: 0,
+              yOffset: -5,
+              font: LabelFont,
+              backgroundColor: CLIMBER_COLOR,
+            },
+          });
+        });
+
+
+
+        receivedAccidentDetections.forEach((accidentDetection) => {
+          const { x, y, width, height } = bboxCoordsToCanvasCoords(
+            canvas,
+            accidentDetection.bbox
+          );
+          // console.log("drawing boxes for accidents");
+          drawRect(ctx, x, y, width, height, {
+            lineWidth: 2,
+            strokeStyle: FIRE_COLOR,
+            label: {
+              // text: "Accident",
+              text: accidentDetection.label || "",
+
+              // text: `${
+              //   accidentDetection.label
+              // } ${accidentDetection.confidence.toFixed(2)}`,
+              xOffset: 0,
+              yOffset: -5,
+              font: LabelFont,
+              backgroundColor: FIRE_COLOR,
+            },
+          });
+        });
         receivedCrackDetections.forEach((crackDetection) => {
           const { x, y, width, height } = bboxCoordsToCanvasCoords(
             canvas,
@@ -303,29 +370,6 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
             },
           });
         });
-
-        receivedAccidentDetections.forEach((accidentDetection) => {
-          const { x, y, width, height } = bboxCoordsToCanvasCoords(
-            canvas,
-            accidentDetection.bbox
-          );
-
-          drawRect(ctx, x, y, width, height, {
-            lineWidth: 2,
-            strokeStyle: ACCIDENT_COLOR,
-            label: {
-              text: "Accident",
-              // text: `${
-              //   accidentDetection.label
-              // } ${accidentDetection.confidence.toFixed(2)}`,
-              xOffset: 0,
-              yOffset: -5,
-              font: LabelFont,
-              backgroundColor: ACCIDENT_COLOR,
-            },
-          });
-        });
-
         // Cell phone in jails
         if (cctv.cctv_type === CCTV_TYPES.PRISON) {
           receivedObjectDetections
@@ -469,18 +513,25 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
             </DangerTag>
           )}
           {/* {currentTamperStatus && frameCount > 400 && <DangerTag>CCTV tampered</DangerTag>} */}
-          {currentAnomalyClassification?.suspicious && (
+          {/* {currentAnomalyClassification?.suspicious && (
             <DangerTag>
               Suspicious 🤔
-              {/* {" "}
-            {currentAnomalyClassification.prediction.prediction_confidence.toFixed(
-              2
-            )}
-            % */}
+
+            </DangerTag>
+          )} */}
+          {currentClimberDetections.length > 0 && (
+            <DangerTag>
+              Climber detected 🧗
+            </DangerTag>
+          )}
+          {currentWeaponDetections.length > 0 && (
+            <DangerTag>
+              Weapon detected 🔫
             </DangerTag>
           )}
           {currentFireDetections.length > 0 && <DangerTag>Fire </DangerTag>}
-          {currentAnomalyClassification?.climbing && (
+          {currentAccidentDetections.length > 0 && <DangerTag>Accident </DangerTag>}
+          {/* {currentAnomalyClassification?.climbing && (
             <DangerTag>
               Climber{" "}
               {currentAnomalyClassification.prediction.prediction_confidence.toFixed(
@@ -488,10 +539,8 @@ const CCTVStream: React.FC<CCTVStreamProps> = (props) => {
               )}
               %
             </DangerTag>
-          )}
-          {currentAccidentDetections.length > 0 && (
-            <DangerTag>Accident 🚗</DangerTag>
-          )}
+          )} */}
+          
         </div>
       </div>
       <div>
